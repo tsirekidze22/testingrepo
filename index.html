@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ka">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Georgian Linguist Pro — ქართული ენის რედაქტორი</title>
+  <meta name="description"
+    content="Georgian Linguist Pro — AI-powered Georgian language editor for spelling, grammar and style.">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Georgian', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fff1f1',
+              100: '#ffe4e4',
+              200: '#ffc9c9',
+              300: '#ff9e9e',
+              400: '#ff6060',
+              500: '#f83838',
+              600: '#e41a1a',
+              700: '#c01313',
+              800: '#9f1313',
+              900: '#841717',
+            },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.4s ease both',
+            'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulseSoft: {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0.6' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* ── Dark theme (default) ── */
+    :root {
+      --bg: #0d0e12;
+      --surface: #15171f;
+      --surface-2: #1c1f2b;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-hover: rgba(255, 255, 255, 0.14);
+      --text-primary: #f0f1f5;
+      --text-secondary: #8b8fa8;
+      --text-muted: #575b70;
+      --accent: #e41a1a;
+      --accent-hover: #c01313;
+      --accent-glow: rgba(228, 26, 26, 0.25);
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 0 1px var(--accent-glow), 0 4px 24px var(--accent-glow);
+      --header-bg: rgba(13, 14, 18, 0.85);
+      --header-border: rgba(255, 255, 255, 0.07);
+      --gradient-text-from: #ffffff;
+      --gradient-text-to: #c5c7d4;
+      --disabled-bg: #2a2d3a;
+      --noise-opacity: 0.4;
+    }
+
+    /* ── Light theme ── */
+    [data-theme="light"] {
+      --bg: #f4f5f7;
+      --surface: #ffffff;
+      --surface-2: #f0f1f5;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.16);
+      --text-primary: #111218;
+      --text-secondary: #4b4f63;
+      --text-muted: #8b90a8;
+      --accent: #d91515;
+      --accent-hover: #b51010;
+      --accent-glow: rgba(217, 21, 21, 0.2);
+      --green: #16a34a;
+      --blue: #2563eb;
+      --shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      --shadow-glow: 0 0 0 1px var(--accent-glow), 0 4px 16px var(--accent-glow);
+      --header-bg: rgba(255, 255, 255, 0.9);
+      --header-border: rgba(0, 0, 0, 0.08);
+      --gradient-text-from: #111218;
+      --gradient-text-to: #4b4f63;
+      --disabled-bg: #e2e4ea;
+      --noise-opacity: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans Georgian', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-hover);
+      border-radius: 99px;
+    }
+
+    /* Custom textarea */
+    textarea {
+      field-sizing: content;
+      scrollbar-width: thin;
+    }
+
+    /* Glass card */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s;
+    }
+
+    .glass:hover {
+      border-color: var(--border-hover);
+    }
+
+    /* Accent button glow */
+    .btn-accent {
+      background: var(--accent);
+      box-shadow: 0 0 0 0 var(--accent-glow);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background: var(--accent-hover);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-accent:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-accent:disabled {
+      background: var(--disabled-bg);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--gradient-text-from) 0%, var(--gradient-text-to) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Focus ring */
+    .focus-ring:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent-glow), 0 0 0 1px var(--accent);
+    }
+
+    /* History item hover */
+    .history-item {
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+
+    .history-item:hover {
+      background: var(--surface-2) !important;
+      border-color: var(--border-hover) !important;
+      transform: translateX(2px);
+    }
+
+    /* Subtle noise background */
+    .noise::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: var(--noise-opacity);
+      transition: opacity 0.3s;
+    }
+
+    /* Animated badge */
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+    }
+
+    .dot-pulse {
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    /* Theme transition for surfaces */
+    .glass,
+    textarea,
+    button {
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+  </style>
+  <!-- Apply saved theme BEFORE React renders to avoid flash -->
+  <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('glp_theme');
+          if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        } catch (e) { }
+      })();
+  </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body class="noise">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules
+
+# Local env files
+.env.local
+.env*.local
+
+# Build output (will be rebuilt by Vercel)
+dist
+dist-ssr
+
+# Logs
+*.log
+
+# Editor
+.vscode
+.idea
+.DS_Store
+
+# Documentation (optional - remove these lines if you want docs deployed)
+*.md
+!README.md
