@@ -33,6 +33,8 @@ export default async function handler(
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
+  console.log('GEMINI_API_KEY retrieved successfully (length:', apiKey.length, ', prefix:', apiKey.slice(0, 4) + '***)');
+
   try {
     const ai = new GoogleGenAI({ apiKey });
 
@@ -50,7 +52,7 @@ export default async function handler(
   `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-2.0-flash',
       contents: text,
       config: {
         systemInstruction,
@@ -87,9 +89,11 @@ export default async function handler(
 
     return res.status(200).json(correctionResult);
   } catch (error: any) {
-    console.error('Gemini API Error:', error);
-    return res.status(500).json({ 
-      error: 'ტექსტის დამუშავება ვერ მოხერხდა. გთხოვთ, სცადოთ მოგვიანებით.' 
+    console.error('Gemini API Error message:', error?.message);
+    console.error('Gemini API Error status:', error?.status ?? error?.code);
+    console.error('Gemini API Error details:', JSON.stringify(error, null, 2));
+    return res.status(500).json({
+      error: 'ტექსტის დამუშავება ვერ მოხერხდა. გთხოვთ, სცადოთ მოგვიანებით.'
     });
   }
 }
