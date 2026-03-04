@@ -51,6 +51,7 @@ export default async function handler(
     6. Provide a very brief explanation in Georgian about what was corrected.
   `;
 
+    console.log('Calling Gemini API...');
     const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
       contents: text,
@@ -77,6 +78,13 @@ export default async function handler(
         },
       },
     });
+
+    console.log('Gemini response received, response.text:', response.text);
+
+    if (!response.text) {
+      console.error('response.text is empty or undefined');
+      return res.status(500).json({ error: 'Empty response from Gemini' });
+    }
 
     const result = JSON.parse(response.text.trim());
     
